@@ -14,11 +14,12 @@ return {
 
 		local fzflua = require("fzf-lua")
 
-		vim.keymap.set("n", "<leader>sh", fzflua.help_tags, { desc = "[S]earch [H]elp (fzf-lua)" })
-		vim.keymap.set("n", "<leader>sk", fzflua.keymaps, { desc = "[S]earch [K]eymaps (fzf-lua)" })
-		vim.keymap.set("n", "<leader>sf", fzflua.files, { desc = "[S]earch [F]iles (fzf-lua)" })
-		vim.keymap.set("n", "<leader>sg", fzflua.live_grep, { desc = "[S]earch by [G]rep (fzf-lua)" })
-		vim.keymap.set("n", "<leader>sr", fzflua.resume, { desc = "[S]earch [R]esume (fzf-lua)" })
+		vim.keymap.set("n", "<leader>sh", fzflua.help_tags, { desc = "[H]elp (fzf-lua)" })
+		vim.keymap.set("n", "<leader>sk", fzflua.keymaps, { desc = "[K]eymaps (fzf-lua)" })
+		vim.keymap.set("n", "<leader>sf", fzflua.files, { desc = "[F]iles (fzf-lua)" })
+		vim.keymap.set("n", "<leader>sg", fzflua.live_grep, { desc = "[G]rep (fzf-lua)" })
+		vim.keymap.set("n", "<leader>sr", fzflua.resume, { desc = "[R]esume (fzf-lua)" })
+		vim.keymap.set("n", "<leader>st", fzflua.tags, { desc = "[T]ags" })
 		vim.keymap.set("n", "<leader><leader>", fzflua.buffers, { desc = "[ ] Find existing buffers (fzf-lua)" })
 
 		vim.keymap.set(
@@ -31,8 +32,8 @@ return {
 		vim.keymap.set("n", "<leader>sn", function()
 			fzflua.files({
 				cwd = vim.fn.stdpath("config"),
-				prompt = "Search Neovim config files:",
+				prompt = "Neovim config files:",
 			})
-		end, { desc = "[S]earch [N]eovim files (fzf-lua)" })
+		end, { desc = "[N]eovim files (fzf-lua)" })
 	end,
 }
