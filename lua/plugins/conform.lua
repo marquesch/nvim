@@ -31,6 +31,7 @@ return { -- Autoformat
 		formatters_by_ft = {
 			lua = { "stylua" },
 			python = { "black", "ruff_format", stop_after_first = true },
+			go = { "gopls" },
 			-- Conform can also run multiple formatters sequentially
 			-- python = { "isort", "black" },
 			--
