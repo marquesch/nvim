@@ -17,6 +17,9 @@ return {
 				git_ignored = false,
 				custom = { "\\.git", "venv", "\\.venv", "__pycache__" },
 			},
+			update_focused_file = {
+				enable = true,
+			},
 		})
 
 		local api = require("nvim-tree.api")
