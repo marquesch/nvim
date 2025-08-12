@@ -42,7 +42,7 @@ return {
 				local fzflua = require("fzf-lua")
 
 				-- Find references for the word under your cursor.
-				map("gr", fzflua.lsp_references, "[G]oto [R]eferences")
+				map("gR", fzflua.lsp_references, "[G]oto [R]eferences")
 
 				-- Jump to the implementation of the word under your cursor.
 				--  Useful when your language has ways of declaring types without an actual implementation.
