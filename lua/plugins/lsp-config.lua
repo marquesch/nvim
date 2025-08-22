@@ -190,7 +190,7 @@ return {
 				},
 			},
 			bashls = { capabilities = capabilities },
-			pyright = { capabilities = capabilities },
+			jedi_language_server = { capabilities = capabilities },
 			prettier = { capabilities = capabilities },
 			elixirls = { capabilities = capabilities },
 			-- rust_analyzer = {},
