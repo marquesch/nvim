@@ -1,5 +1,6 @@
 return {
 	"nvim-tree/nvim-tree.lua",
+	version = "*",
 	lazy = true,
 	config = function()
 		require("nvim-tree").setup({
@@ -15,7 +16,7 @@ return {
 			filters = {
 				dotfiles = false,
 				git_ignored = false,
-				custom = { "\\.git", "venv", "\\.venv", "__pycache__" },
+				custom = { "^\\.git$", "venv", "\\.venv", "__pycache__" },
 			},
 			update_focused_file = {
 				enable = true,
