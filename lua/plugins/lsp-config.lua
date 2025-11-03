@@ -193,6 +193,7 @@ return {
 			jedi_language_server = { capabilities = capabilities },
 			prettier = { capabilities = capabilities },
 			elixirls = { capabilities = capabilities },
+			ts_ls = { capabilities = capabilities },
 			-- rust_analyzer = {},
 			-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 			--
