@@ -1,4 +1,3 @@
--- TODO Make it work
 return {
 	"Shatur/neovim-session-manager",
 	dependencies = { "nvim-lua/plenary.nvim" },
@@ -8,7 +7,7 @@ return {
 
 		require("session_manager").setup({
 			sessions_dir = Path:new(vim.fn.stdpath("data"), "sessions"),
-			autoload_mode = config.AutoloadMode.Disabled,
+			autoload_mode = config.AutoloadMode.CurrentDir,
 		})
 	end,
 }

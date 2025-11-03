@@ -7,9 +7,6 @@ return {
 			grep = {
 				rg_glob = true,
 			},
-			tags = {
-				file_path = "tags",
-			},
 		})
 
 		local fzflua = require("fzf-lua")

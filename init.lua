@@ -6,5 +6,4 @@ require("options")
 require("mappings")
 
 require("config.lazy")
-require("config.alpha")
 require("autocommands")
