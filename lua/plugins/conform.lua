@@ -6,7 +6,7 @@ return { -- Autoformat
 		{
 			"<leader>f",
 			function()
-				require("conform").format({ async = true, lsp_format = "fallback" })
+				require("conform").format({ async = true })
 			end,
 			mode = "",
 			desc = "[F]ormat buffer",
@@ -18,21 +18,21 @@ return { -- Autoformat
 			-- Disable "format_on_save lsp_fallback" for languages that don't
 			-- have a well standardized coding style. You can add additional
 			-- languages here or re-enable it for the disabled ones.
-			local disable_filetypes = { c = true, cpp = true }
-			if disable_filetypes[vim.bo[bufnr].filetype] then
+			local disable_filetypes = { c = true, cpp = true, js = true, ts = true, py = true }
+                if disable_filetypes[vim.bo[bufnr].filetype] then
 				return nil
 			else
 				return {
-					timeout_ms = 1000,
+					timeout_ms = 1500,
 					lsp_format = "fallback",
 				}
 			end
 		end,
 		formatters_by_ft = {
 			lua = { "stylua" },
-			python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
-			-- python = { "black", "ruff_format", stop_after_first = true },
-			go = { "gofumpt", "gopls", stop_after_first = true },
+			-- python = { "ruff", "ruff_organize_imports", "ruff_format" },
+			python = { "black" },
+			go = { "gopls" },
 			-- Conform can also run multiple formatters sequentially
 			-- python = { "isort", "black" },
 			--
