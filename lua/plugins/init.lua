@@ -17,4 +17,5 @@ return {
 		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = { signs = false },
 	},
+	{ "nuvic/flexoki-nvim", name = "flexoki", opts = { variant = "moon" } },
 }
