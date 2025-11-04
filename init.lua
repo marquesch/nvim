@@ -8,4 +8,4 @@ require("mappings")
 require("config.lazy")
 require("autocommands")
 
-vim.cmd("colorscheme no-clown-fiesta")
+vim.cmd("colorscheme kanagawa-dragon")
