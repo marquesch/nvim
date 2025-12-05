@@ -10,6 +10,10 @@ return {
 		})
 
 		local fzflua = require("fzf-lua")
+		local config = fzflua.config
+		local actions = fzflua.actions
+
+		config.defaults.actions.files["ctrl-h"] = actions.file_split
 
 		vim.keymap.set("n", "<leader>sh", fzflua.help_tags, { desc = "[H]elp (fzf-lua)" })
 		vim.keymap.set("n", "<leader>sk", fzflua.keymaps, { desc = "[K]eymaps (fzf-lua)" })
