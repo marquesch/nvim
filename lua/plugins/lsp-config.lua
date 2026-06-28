@@ -190,10 +190,71 @@ return {
 				},
 			},
 			bashls = { capabilities = capabilities },
-			jedi_language_server = { capabilities = capabilities },
-			prettier = { capabilities = capabilities },
+			jedi_language_server = {
+				capabilities = capabilities,
+				-- Point jedi at the project's mise-managed Python so it resolves
+				-- the right interpreter + installed dependencies. mise switches
+				-- versions via a shell hook (it doesn't apply inside a long-running
+				-- nvim), so we resolve the interpreter ourselves from the project root.
+				-- NOTE: mutate `params.initializationOptions` directly, not
+				-- `config.init_options`. By the time before_init runs, Neovim has
+				-- already built the initialize params from config.init_options, so
+				-- reassigning config.init_options here would be silently dropped.
+				before_init = function(params, config)
+					local root = config.root_dir
+					if not root then
+						return
+					end
+
+					-- Resolve the Python interpreter to hand to jedi, in priority order:
+					--   1. a project-local virtualenv (.venv / venv)
+					--   2. the mise-managed interpreter for this directory
+					--   3. a plain `python3`/`python` on PATH
+					local function resolve_python()
+						for _, name in ipairs({ ".venv", "venv" }) do
+							local p = root .. "/" .. name .. "/bin/python"
+							if vim.fn.executable(p) == 1 then
+								return p
+							end
+						end
+
+						local mise = vim.fn.exepath("mise")
+						if mise == "" and vim.fn.executable(vim.fn.expand("~/.local/bin/mise")) == 1 then
+							mise = vim.fn.expand("~/.local/bin/mise")
+						end
+						if mise ~= "" then
+							local out = vim
+								.system({ mise, "which", "python" }, {
+									cwd = root,
+									text = true,
+									env = { MISE_PYTHON_GITHUB_ATTESTATIONS = "false" },
+								})
+								:wait()
+							local python = vim.trim(out.stdout or "")
+							if out.code == 0 and python ~= "" then
+								return python
+							end
+						end
+
+						local sys = vim.fn.exepath("python3")
+						if sys == "" then
+							sys = vim.fn.exepath("python")
+						end
+						return sys ~= "" and sys or nil
+					end
+
+					local python = resolve_python()
+					if python then
+						params.initializationOptions = params.initializationOptions or {}
+						params.initializationOptions.workspace = params.initializationOptions.workspace or {}
+						params.initializationOptions.workspace.environmentPath = python
+					end
+				end,
+			},
 			elixirls = { capabilities = capabilities },
 			ts_ls = { capabilities = capabilities },
+			-- NOTE: prettier/stylua are formatters, not language servers. They are
+			-- installed via mason-tool-installer below and run through conform.nvim.
 			-- rust_analyzer = {},
 			-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 			--
@@ -236,22 +297,23 @@ return {
 		local ensure_installed = vim.tbl_keys(servers or {})
 		vim.list_extend(ensure_installed, {
 			"stylua", -- Used to format Lua code
+			"prettier", -- Formatter run via conform.nvim (not an LSP)
 		})
 		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+
+		-- Register per-server overrides via Neovim's native LSP config API.
+		-- mason-lspconfig v2 removed the `handlers` option; instead it auto-enables
+		-- installed servers (`automatic_enable`), merging in any config registered
+		-- here by name. These are layered on top of nvim-lspconfig's shipped defaults.
+		for server_name, server in pairs(servers) do
+			server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+			vim.lsp.config(server_name, server)
+		end
 
 		require("mason-lspconfig").setup({
 			ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
 			automatic_installation = false,
-			handlers = {
-				function(server_name)
-					local server = servers[server_name] or {}
-					-- This handles overriding only values explicitly passed
-					-- by the server configuration above. Useful when disabling
-					-- certain features of an LSP (for example, turning off formatting for ts_ls)
-					server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-					require("lspconfig")[server_name].setup(server)
-				end,
-			},
+			automatic_enable = true,
 		})
 	end,
 }
