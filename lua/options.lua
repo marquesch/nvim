@@ -36,6 +36,9 @@ vim.o.breakindent = true
 -- Save undo history
 vim.o.undofile = true
 
+-- Reload files when they change on disk (paired with the checktime autocmd)
+vim.o.autoread = true
+
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
 vim.o.smartcase = true

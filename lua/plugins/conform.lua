@@ -16,8 +16,8 @@ return { -- Autoformat
 		notify_on_error = false,
 		formatters_by_ft = {
 			lua = { "stylua" },
-			-- python = { "ruff", "ruff_organize_imports", "ruff_format" },
-			python = { "black" },
+			python = { "ruff", "ruff_organize_imports", "ruff_format" },
+			-- python = { "black" },
 			go = { "gopls" },
 			-- Conform can also run multiple formatters sequentially
 			-- python = { "isort", "black" },
